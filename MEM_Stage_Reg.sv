@@ -1,17 +1,30 @@
 `timescale 1ns/1ns
-module MEM_Stage_Reg(input clk,reset,
-                input [31:0] PC_in,
-                output reg [31:0] PC);
+module MEM_Stage_Reg(input clk,reset,WB_EN_IN,MEM_R_EN_IN,
+  input[31:0] ALU_result_in,Mem_read_value_in,
+  input[3:0] Dest_in,
+  
+  output reg WB_en,MEM_R_en,
+  output reg [31:0] ALU_result,Mem_read_value,
+  output reg [3:0] Dest
+               );
                 
   always@(posedge clk,posedge reset)
     begin
       if(reset)
         begin
-          PC <= 32'b0;
+          {WB_en,MEM_R_en} <= 2'b0;
+          ALU_result <= 32'b0;
+          Mem_read_value <= 32'b0;
+          Dest <= 4'b0;
         end
       else
         begin
-          PC <= PC_in;
+          WB_en <= WB_EN_IN;
+          MEM_R_en <= MEM_R_EN_IN ;
+          ALU_result <= ALU_result_in;
+          Mem_read_value <= Mem_read_value_in ;
+          Dest <= Dest_in;
         end
     end
+    
 endmodule
