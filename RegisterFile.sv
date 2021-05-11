@@ -1,28 +1,38 @@
 `timescale 1ns/1ns
 module RegisterFile(
-  input clk,rst,
+  input clk,reset,
   input [3:0] src1, src2, Dest_wb,
-  input [31:0] Result_wb,
+  input [31:0] Result_WB,
   input wirteBackEn,
   output [31:0] reg1,reg2
   );
 
-  reg [31:0] data[0:15];
+  reg [31:0] Data[0:14];
 
-
-  assign reg1 = data[src1];
-  assign reg2 = data[src2];
-
-  integer i=0;
-  always @(negedge clk, posedge rst) begin
-    if(rst) begin
-      for (i = 0; i < 16; i=i+1)
-         data[i] <= i;
-    end
-    else if(wirteBackEn) begin
-      data[Dest_wb] <= Result_wb;
-    end
+  always @(negedge clk, posedge reset)
+   begin
+    if(reset)
+     begin
+      for (integer i = 0; i < 15; i=i+1)
+      begin
+         Data[i] <= i;
+      end
+     end
+    else 
+      begin
+        if(wirteBackEn) 
+          begin
+            Data[Dest_wb] <= Result_WB;
+          end
+        else
+          begin
+             Data[Dest_wb] <= Data[Dest_wb];
+          end
+      end
   end
+  
+  assign reg1 = Data[src1];
+  assign reg2 = Data[src2];
   
 
 endmodule  
