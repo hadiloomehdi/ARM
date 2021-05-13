@@ -60,7 +60,7 @@ module ID_Stage(
         assign signal_sel = hazard | ~condRes;
         
         MUX2to1_9bit controll_signals_Mux(
-                .a({wb_en,mem_read,mem_write,exe_cmd,branch,s_out}),
+                .a({WB_en,mem_read,mem_write,exe_cmd,branch,s_out}),
                 .b({9'b0}),
                 .sel(signal_sel),
                 .out(controll_signals)
