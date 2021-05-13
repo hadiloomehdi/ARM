@@ -1,7 +1,7 @@
 `timescale 1ns/1ns
 module ARM(input clk,reset);
   
-  wire Freeze,Flush,Branch_Taken;
+  wire Freeze,Flush;
   wire [31:0] Branch_Addres;
   wire [31:0] PC,Instruction;
   wire [31:0] IF_Reg_PC,IF_Reg_Instruction;
@@ -48,7 +48,7 @@ module ARM(input clk,reset);
   
   wire C_in,V_in,N_in,Z_in;
 
- IF_Stage My_IF_Stage(.clk(clk),.reset(reset),.Freeze(Freeze),.Branch_Taken(Branch_Taken),
+ IF_Stage My_IF_Stage(.clk(clk),.reset(reset),.Freeze(Freeze),.Branch_Taken(Flush),
                 .Branch_Addres(Branch_Addres),
                 .PC(PC),.Instruction(Instruction));
   

@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-module Status_register(input clk,reset,C_in,V_in,N_in,Z_in,S, output SR);
+module Status_register(input clk,reset,C_in,V_in,N_in,Z_in,S, output [3:0] SR);
   
   reg C_out,V_out,N_out,Z_out;
   

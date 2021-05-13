@@ -7,14 +7,14 @@ module PC(input clk ,reset,input [31:0] pc,input Freeze,output reg [31:0] Addres
         Address <= 32'b0;
       else
         begin
-          if(Freeze)
+          if(~Freeze)
             begin
-             Address <= Address;
+             Address <= pc;
             end
-          else
-           begin
-            Address <= pc;
-           end
+          // else
+          //  begin
+          //   Address <= Address;
+          //  end
         end
     end
     

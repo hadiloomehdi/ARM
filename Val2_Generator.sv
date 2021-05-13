@@ -1,5 +1,6 @@
 `timescale 1ns/1ns
-module Val2_generator(input[31:0] Val_Rm,
+module Val2_generator(
+  input[31:0] Val_Rm,
   input [11:0] shift_operand,
   input imm,LDR_OR_STR,
   output reg[31:0] Val2

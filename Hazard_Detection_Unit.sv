@@ -14,7 +14,7 @@ module Hazard_Detection_Unit(
         (src2 == Mem_Dest &&  Mem_WB_En == 1 && two_src == 1)
       )
         begin
-          Hazard_Detected <= 1;
+          Hazard_Detected <= 0; // 1 change later 
         end
       else
         begin
