@@ -142,7 +142,7 @@ MEM_Stage_Reg My_MEM_Stage_Reg(
       .ALU_result_in(Alu_result_MEM),.Mem_read_value_in(),
       .Dest_in(Dest_MEM),
   
-      .WB_en(WB_WB_EN),.MEM_R_en(MEM_R_EN_WB),
+      .WB_en(WB_WB_En),.MEM_R_en(MEM_R_EN_WB),
       .ALU_result(Alu_result_WB),.Mem_read_value(MEM_Result_WB),
       .Dest(WB_Dest)
       );
