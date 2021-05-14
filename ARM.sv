@@ -91,7 +91,7 @@ ID_Stage_Reg My_ID_Stage_Reg(
         .Shift_operand_IN(Shift_operand_ID),
         .Signed_imm_24_IN(Signed_imm_24_ID),
         .Dest_IN(Dest_ID),
-        .C_in(SR[0]),
+        .C_in(SR[3]),
   
         .Wb_EN(WB_EN_EXE),.MEM_R_EN(MEM_R_EN_EXE),.MEM_W_EN(MEM_W_EN_EXE),.B(Flush),.S(ST_EXE),
         .EXE_CMD(EXE_CMD_EXE),
@@ -139,7 +139,7 @@ MEM_Stage My_MEM_Stage(
       
 MEM_Stage_Reg My_MEM_Stage_Reg(
       .clk(clk),.reset(reset),.WB_EN_IN(WB_EN_MEM),.MEM_R_EN_IN(MEM_R_EN_MEM),
-      .ALU_result_in(Alu_result_MEM),.Mem_read_value_in(),
+      .ALU_result_in(Alu_result_MEM),.Mem_read_value_in(MEM_Result),
       .Dest_in(Dest_MEM),
   
       .WB_en(WB_WB_En),.MEM_R_en(MEM_R_EN_WB),

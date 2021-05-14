@@ -14,10 +14,10 @@ always@(*)
       end
     else if(imm)
       begin
-        imm_32bit <= {24'b0,shift_operand[7:0]};
+        imm_32bit = {24'b0,shift_operand[7:0]};
         for (integer i =0;i<2*shift_operand[11:8];i=i+1)
         begin 
-          imm_32bit <= {imm_32bit[0],imm_32bit[31:1]};
+          imm_32bit = {imm_32bit[0],imm_32bit[31:1]};
         end
         Val2 <= imm_32bit;
       end
@@ -29,10 +29,10 @@ always@(*)
           2'b10: Val2 <= Val_Rm >>> shift_operand[11:7];//Ar Right
           2'b11://Rotate R
           begin
-            Val2 <= Val_Rm;
+            Val2 = Val_Rm;
             for(integer i = 0 ; i < shift_operand[11:7] ; i = i+1)
             begin
-              Val2 <= {Val2[0],Val2[31:1]};
+              Val2 = {Val2[0],Val2[31:1]};
             end
           end
         endcase

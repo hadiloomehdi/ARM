@@ -1,5 +1,13 @@
 `timescale 1ns/1ns
-module ALU(input C_in,input [3:0] exe_cmd, input [31:0] Val1,Val2,output reg [31:0] Alu_result,output Z,N,output reg V,C_out);
+module ALU(
+  input C_in,
+  input [3:0] exe_cmd,
+  input [31:0] Val1,Val2,
+   
+  output reg [31:0] Alu_result,
+  output Z,N,
+  output reg V,C_out
+);
   
   always@(Val1,Val2,exe_cmd)
     begin
@@ -13,7 +21,7 @@ module ALU(input C_in,input [3:0] exe_cmd, input [31:0] Val1,Val2,output reg [31
         begin
           Alu_result <= ~Val2;
         end 
-        4'b0010 ://ADD
+        4'b0010 ://ADD,LDR,STR
         begin
           {C_out,Alu_result} <= Val1 + Val2;
           V <= (Val1[31] & Val2[31] & !Alu_result[31]) || (!Val1[31] & !Val2[31] & Alu_result[31]);
@@ -30,10 +38,10 @@ module ALU(input C_in,input [3:0] exe_cmd, input [31:0] Val1,Val2,output reg [31
         end
         4'b0101 ://SUBC
         begin
-          {C_out,Alu_result} <= Val1 - Val2 - C_in;
+          {C_out,Alu_result} <= Val1 - Val2 - {32{~C_in}};
            V <= (!Val1[31] & Val2[31] & Alu_result[31]) || (Val1[31] & !Val2[31] & Alu_result[31]);
         end
-        4'b0110 ://AND,LDR,STR
+        4'b0110 ://AND
         begin
           Alu_result <= Val1 & Val2;
         end

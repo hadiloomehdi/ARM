@@ -34,6 +34,7 @@ module ID_Stage_Reg(
            Shift_operand <= 12'b0;
            Signed_imm_24 <= 24'b0;
            Dest <= 4'b0;
+           C_out <= 1'b0;
         end
       else if(flush)
         begin
@@ -44,6 +45,7 @@ module ID_Stage_Reg(
            Shift_operand <= 12'b0;
            Signed_imm_24 <= 24'b0;
            Dest <= 4'b0;
+           C_out <= 1'b0;
         end
       else
         begin
@@ -60,6 +62,7 @@ module ID_Stage_Reg(
            Shift_operand <= Shift_operand_IN;
            Signed_imm_24 <= Signed_imm_24_IN;
            Dest <= Dest_IN;
+           C_out <= C_in;
         end
     end
   

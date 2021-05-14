@@ -9,7 +9,7 @@ module TB();
     reset=1;
     #200
     reset=0;
-    #8000;
+    #100000;
     $stop;
   end
 endmodule 

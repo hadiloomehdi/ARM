@@ -7,7 +7,7 @@ input[31:0] VAL_RN,VAL_RM,
 input imm,
 input[11:0] Shift_operand,
 input[23:0] Signed_imm_24,
-input[3:0] C_in,
+input C_in,
 
 output[31:0] ALU_result,Br_addr,
 output[3:0] status);
@@ -26,7 +26,8 @@ assign signed_EX_imm_24 = {{8{Signed_imm_24[23]}},Signed_imm_24}<<2;
 
 Adder adder(.a(PC),.b(signed_EX_imm_24),.result(Br_addr));
 
-Val2_generator val2_generator(.Val_Rm(VAL_RM),
+Val2_generator val2_generator(
+  .Val_Rm(VAL_RM),
   .shift_operand(Shift_operand),
   .imm(imm),.LDR_OR_STR(LDR_OR_STR),
   .Val2(Val2)

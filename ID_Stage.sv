@@ -70,8 +70,8 @@ module ID_Stage(
         assign Two_src = ~imm || MEM_W_EN;
         
         MUX2to1_32bit registerFileMux(
-                .a(Instruction[15:12]),
-                .b(Instruction[3:0]),
+                .a(Instruction[3:0]),
+                .b(Instruction[15:12]),
                 .sel(mem_write),
                 .out(regFileSrc2)
         );

@@ -5,7 +5,7 @@ module ConditionCheck(
   output reg condRes
   );
   wire z,c,n,v;
-  assign {z, c, n, v} = statusRegister;
+  assign {c,v, n, z} = statusRegister;
 
   always @(*) begin
     case(cond)
