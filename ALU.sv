@@ -33,7 +33,7 @@ module ALU(
         end
         4'b0100 ://SUB
         begin
-          {C_out,Alu_result} <= Val1 - Val2;
+          {C_out,Alu_result} <= {Val1[31],Val1} - {Val2[31],Val2};
            V <= (!Val1[31] & Val2[31] & Alu_result[31]) || (Val1[31] & !Val2[31] & Alu_result[31]);
         end
         4'b0101 ://SUBC
@@ -53,15 +53,13 @@ module ALU(
         begin
            Alu_result <= Val1 ^ Val2;
         end
-        4'b0100 : //CMP
+
+
+        default:
         begin
-          Alu_result <= Val1 - Val2;
+         Alu_result <= Alu_result;
+         C_out <= C_in;
         end
-        4'b0110 : //TST
-        begin
-           Alu_result <= Val1 & Val2;
-        end
-        default: Alu_result <= Alu_result;
       endcase
     end
     

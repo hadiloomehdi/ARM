@@ -31,7 +31,7 @@ module RegisterFile(
       end
   end
   
-  assign reg1 = Data[src1];
+  assign reg1 = (src1== 4'b1111) ? 0 : Data[src1];
   assign reg2 = Data[src2];
   
 

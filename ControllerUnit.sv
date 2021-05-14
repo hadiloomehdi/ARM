@@ -3,15 +3,16 @@ module ControllerUnit(
     input [1 : 0] mode,
     input [3 : 0] opcode,
     input s_in,
-    output s_out,
+    output reg s_out,
     output reg [3 : 0] exe_cmd,
     output reg mem_read, mem_write, WB_en, branch
     );
     
-    assign s_out = s_in;
+    // assign s_out = s_in;
     
     always @(mode, opcode,s_in) begin
     {mem_read, mem_write, WB_en, branch, exe_cmd} = 8'b0;
+    s_out <= s_in;
       case(mode)
         2'b00: 
         begin
@@ -112,6 +113,7 @@ module ControllerUnit(
         2'b10:
         begin
           branch <= 1;
+          s_out <= 0;
         end
       endcase
     end
