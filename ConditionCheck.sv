@@ -22,8 +22,8 @@ module ConditionCheck(
       4'b1001 : condRes <= ~c & z; // LS
       4'b1010 : condRes <= (n & v) | (~n & ~v); // GE
       4'b1011 : condRes <= (n & ~v) | (~n & v); // LT
-      4'b1100 : condRes <= (~z & ( (n & v) | (~n & ~v) ) ); //GT
-      4'b1101 : condRes <= (z | ( (~v & n) | (v & ~n) ) ); //LE
+      4'b1100 : condRes <= (~z & ( n==v ) ); //GT
+      4'b1101 : condRes <= (z | (n!=v ) ); //LE
       4'b1110 : condRes <= 1; //AL
       4'b1111 : condRes <= 1;
       default: condRes <= 1;

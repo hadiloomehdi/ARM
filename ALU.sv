@@ -8,10 +8,16 @@ module ALU(
   output Z,N,
   output reg V,C_out
 );
+  //reg[31:0] sa;
+  //reg V,C_out;
+ // reg[31:0] Alu_result;
+  //assign Alu_result1 = Alu_result;
+ // assign V1 = V;
+ // assign C_out1 = C_out;
   
   always@(Val1,Val2,exe_cmd)
     begin
-       {V,C_out} = 2'b0;
+       {V,C_out} <= 2'b0;
       case(exe_cmd)
         4'b0001 ://MOV
         begin
@@ -25,21 +31,22 @@ module ALU(
         begin
           {C_out,Alu_result} <= Val1 + Val2;
           V <= (Val1[31] & Val2[31] & !Alu_result[31]) || (!Val1[31] & !Val2[31] & Alu_result[31]);
+          //V <= 1 & Alu_result[31];
         end
         4'b0011 : //ADDC
         begin
           {C_out,Alu_result} <= Val1 + Val2 + C_in;
            V <= (Val1[31] & Val2[31] & !Alu_result[31]) || (!Val1[31] & !Val2[31] & Alu_result[31]);
         end
-        4'b0100 ://SUB
+        4'b0100 ://SUB,CMP
         begin
-          {C_out,Alu_result} <= {Val1[31],Val1} - {Val2[31],Val2};
-           V <= (!Val1[31] & Val2[31] & Alu_result[31]) || (Val1[31] & !Val2[31] & Alu_result[31]);
+          {C_out,Alu_result} = {Val1[31],Val1} - {Val2[31],Val2};
+           V <= (!Val1[31] & Val2[31] & Alu_result[31]) || (Val1[31] & !Val2[31] & !Alu_result[31]);
         end
         4'b0101 ://SUBC
         begin
           {C_out,Alu_result} <= Val1 - Val2 - {32{~C_in}};
-           V <= (!Val1[31] & Val2[31] & Alu_result[31]) || (Val1[31] & !Val2[31] & Alu_result[31]);
+           V <= (!Val1[31] & Val2[31] & Alu_result[31]) || (Val1[31] & !Val2[31] & !Alu_result[31]);
         end
         4'b0110 ://AND
         begin

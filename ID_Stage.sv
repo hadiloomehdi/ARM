@@ -69,7 +69,7 @@ module ID_Stage(
         assign {WB_EN,MEM_R_EN,MEM_W_EN,EXE_CMD,B,S} = controll_signals;
         assign Two_src = ~imm || MEM_W_EN;
         
-        MUX2to1_32bit registerFileMux(
+        MUX2to1_4bit registerFileMux(
                 .a(Instruction[3:0]),
                 .b(Instruction[15:12]),
                 .sel(mem_write),
