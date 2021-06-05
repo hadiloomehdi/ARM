@@ -48,6 +48,8 @@ module ARM(input clk,reset);
   
   wire C_in,V_in,N_in,Z_in;
 
+  wire [1:0] sel_src1,sel_src2;
+
  IF_Stage My_IF_Stage(.clk(clk),.reset(reset),.Freeze(Freeze),.Branch_Taken(Flush),
                 .Branch_Addres(Branch_Addres),
                 .PC(PC),.Instruction(Instruction));
@@ -114,6 +116,9 @@ EX_Stage My_EX_Stage(
       .Shift_operand(Shift_operand_EXE),
       .Signed_imm_24(Signed_imm_24_EXE),
       .C_in(C_EXE),
+      .Alu_result_MEM(Alu_result_MEM),
+      .WB_Value(WB_Value),
+      .sel_src1(sel_src1),.sel_src2(sel_src2),
 
       .ALU_result(Alu_result),.Br_addr(Branch_Addres),
       .status(SR_EXE)
@@ -167,6 +172,14 @@ Status_register My_Status_register(
     .C_in(C_in),.V_in(V_in),.N_in(N_in),.Z_in(Z_in),.S(ST_EXE),
     .SR(SR)
     );
+
+ForwardingUnit My_ForwardingUnit(
+      .WB_EN_MEM(WB_EN_MEM),.WB_WB_En(WB_WB_En),
+      .Dest_MEM(Dest_MEM),.WB_Dest(WB_Dest),
+      .src1(src1),.src2((src2)),
+
+      .sel_src1(sel_src1),.sel_src2(sel_src2)
+);
 
   
 endmodule
