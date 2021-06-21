@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-module ARM(input clk,reset);
+module ARM(input clk,reset,Forward_en);
   
   wire Freeze,Flush;
   wire [31:0] Branch_Addres;
@@ -49,6 +49,8 @@ module ARM(input clk,reset);
   wire C_in,V_in,N_in,Z_in;
 
   wire [1:0] sel_src1,sel_src2;
+  
+  wire [3:0] EXE_src1,EXE_src2;
 
  IF_Stage My_IF_Stage(.clk(clk),.reset(reset),.Freeze(Freeze),.Branch_Taken(Flush),
                 .Branch_Addres(Branch_Addres),
@@ -94,6 +96,7 @@ ID_Stage_Reg My_ID_Stage_Reg(
         .Signed_imm_24_IN(Signed_imm_24_ID),
         .Dest_IN(Dest_ID),
         .C_in(SR[3]),
+        .ID_src1(src1),.ID_src2(src2),
   
         .Wb_EN(WB_EN_EXE),.MEM_R_EN(MEM_R_EN_EXE),.MEM_W_EN(MEM_W_EN_EXE),.B(Flush),.S(ST_EXE),
         .EXE_CMD(EXE_CMD_EXE),
@@ -103,9 +106,11 @@ ID_Stage_Reg My_ID_Stage_Reg(
         .Shift_operand(Shift_operand_EXE),
         .Signed_imm_24(Signed_imm_24_EXE),
         .Dest(Dest_EXE),
-        .C_out(C_EXE)          
+        .C_out(C_EXE),
+        .EXE_src1(EXE_src1),.EXE_src2(EXE_src2)          
         );
-
+wire[31:0] Val_Rm_Exe;
+  
 EX_Stage My_EX_Stage(
       .clk(clk),.reset(reset),
       .EXE_CMD(EXE_CMD_EXE),
@@ -119,7 +124,8 @@ EX_Stage My_EX_Stage(
       .Alu_result_MEM(Alu_result_MEM),
       .WB_Value(WB_Value),
       .sel_src1(sel_src1),.sel_src2(sel_src2),
-
+      
+      .Val_Rm_Exe(Val_Rm_Exe),
       .ALU_result(Alu_result),.Br_addr(Branch_Addres),
       .status(SR_EXE)
       );
@@ -127,7 +133,7 @@ EX_Stage My_EX_Stage(
       
 EX_Stage_Reg My_EX_Stage_Reg(
       .clk(clk),.reset(reset),.WB_EN_IN(WB_EN_EXE),.MEM_R_EN_IN(MEM_R_EN_EXE),.MEM_W_EN_IN(MEM_W_EN_EXE),
-      .ALU_result_in(Alu_result),.Val_Rm_IN(Val_Rm_EXE),
+      .ALU_result_in(Alu_result),.Val_Rm_IN(Val_Rm_Exe),
       .Dest_in(Dest_EXE),
   
       .WB_EN(WB_EN_MEM),.MEM_R_EN(MEM_R_EN_MEM),.MEM_W_EN(MEM_W_EN_MEM),
@@ -161,7 +167,8 @@ WB_Stage My_WB_Stage(
 
 Hazard_Detection_Unit My_Hazard_Detection_Unit(
     .src1(src1),.src2(src2),.Exe_Dest(Dest_EXE),.Mem_Dest(Dest_MEM),
-    .Exe_WB_En(WB_EN_EXE),.Mem_WB_En(WB_EN_MEM),.two_src(Two_src),
+    .Exe_WB_En(WB_EN_EXE),.Mem_WB_En(WB_EN_MEM),.two_src(Two_src),.Mem_Read_Exe(MEM_R_EN_EXE),
+    .Forward_en(Forward_en),
     .Hazard_Detected (Freeze)
     );
 
@@ -174,9 +181,9 @@ Status_register My_Status_register(
     );
 
 ForwardingUnit My_ForwardingUnit(
-      .WB_EN_MEM(WB_EN_MEM),.WB_WB_En(WB_WB_En),
+      .WB_EN_MEM(WB_EN_MEM),.WB_WB_En(WB_WB_En),.Forward_en(Forward_en),
       .Dest_MEM(Dest_MEM),.WB_Dest(WB_Dest),
-      .src1(src1),.src2((src2)),
+      .src1(EXE_src1),.src2(EXE_src2),
 
       .sel_src1(sel_src1),.sel_src2(sel_src2)
 );

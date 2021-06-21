@@ -1,7 +1,8 @@
 `timescale 1ns/1ns
 module TB();
   reg reset,clk = 0;
-  ARM UUT(clk,reset);
+  reg Forward_en = 0;
+  ARM UUT(clk,reset,Forward_en);
 
   always
    #100 clk=~clk;

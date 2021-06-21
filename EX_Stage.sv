@@ -9,8 +9,9 @@ input[11:0] Shift_operand,
 input[23:0] Signed_imm_24,
 input C_in,
 input [31:0] Alu_result_MEM,WB_Value,
-input [1 : 0] sel_src1,sel_src2,
+input [1:0] sel_src1,sel_src2,
 
+output[31:0] Val_Rm_Exe,
 output[31:0] ALU_result,Br_addr,
 output[3:0] status);
 
@@ -20,6 +21,8 @@ wire [31:0] Val2;
 assign status = {C_out,V,N,Z};
 wire LDR_OR_STR;
 assign LDR_OR_STR = MEM_R_EN | MEM_W_EN;
+
+
 
 
 wire [31:0] val1, val_generator;
@@ -37,6 +40,8 @@ MUX3to1 mux_val_two(
 
     .out(val_generator)
 );
+
+assign Val_Rm_Exe = val_generator;
 
 ALU ALU(.C_in(C_in),.exe_cmd(EXE_CMD),.Val1(val1),.Val2(Val2),.Alu_result(ALU_result),.Z(Z),.N(N),.V(V),.C_out(C_out));
 
