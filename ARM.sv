@@ -1,6 +1,9 @@
 `timescale 1ns/1ns
-module ARM(input clk,reset,Forward_en);
-  
+module ARM(input clk,reset,Forward_en,
+           output [16:0] SRAM_ADDR,inout [31:0] SRAM_DQ,
+           output SRAM_WE_N
+            );
+
   wire Freeze,Flush;
   wire [31:0] Branch_Addres;
   wire [31:0] PC,Instruction;
@@ -51,14 +54,18 @@ module ARM(input clk,reset,Forward_en);
   wire [1:0] sel_src1,sel_src2;
   
   wire [3:0] EXE_src1,EXE_src2;
+  
+  wire SRAM_ready;
 
  IF_Stage My_IF_Stage(.clk(clk),.reset(reset),.Freeze(Freeze),.Branch_Taken(Flush),
-                .Branch_Addres(Branch_Addres),
-                .PC(PC),.Instruction(Instruction));
+                      .SRAM_Freeze(~SRAM_ready),
+                      .Branch_Addres(Branch_Addres),
+                      .PC(PC),.Instruction(Instruction));
   
  IF_Stage_Reg My_IF_Stage_Reg(.clk(clk),.reset(reset),.Freeze(Freeze),.Flush(Flush),
-                .PC_in(PC),.Instruction_in(Instruction),
-                .PC(IF_Reg_PC),.Instruction(IF_Reg_Instruction));
+                              .SRAM_Freeze(~SRAM_ready),
+                              .PC_in(PC),.Instruction_in(Instruction),
+                              .PC(IF_Reg_PC),.Instruction(IF_Reg_Instruction));
                 
  ID_Stage MY_ID_Stage(
         .clk(clk), .reset(reset),
@@ -97,6 +104,7 @@ ID_Stage_Reg My_ID_Stage_Reg(
         .Dest_IN(Dest_ID),
         .C_in(SR[3]),
         .ID_src1(src1),.ID_src2(src2),
+        .SRAM_Freeze(~SRAM_ready),
   
         .Wb_EN(WB_EN_EXE),.MEM_R_EN(MEM_R_EN_EXE),.MEM_W_EN(MEM_W_EN_EXE),.B(Flush),.S(ST_EXE),
         .EXE_CMD(EXE_CMD_EXE),
@@ -135,7 +143,8 @@ EX_Stage_Reg My_EX_Stage_Reg(
       .clk(clk),.reset(reset),.WB_EN_IN(WB_EN_EXE),.MEM_R_EN_IN(MEM_R_EN_EXE),.MEM_W_EN_IN(MEM_W_EN_EXE),
       .ALU_result_in(Alu_result),.Val_Rm_IN(Val_Rm_Exe),
       .Dest_in(Dest_EXE),
-  
+      .SRAM_Freeze(~SRAM_ready),
+      
       .WB_EN(WB_EN_MEM),.MEM_R_EN(MEM_R_EN_MEM),.MEM_W_EN(MEM_W_EN_MEM),
       .ALU_result(Alu_result_MEM),.Val_Rm(Val_Rm_MEM),
       .Dest(Dest_MEM)
@@ -145,13 +154,20 @@ MEM_Stage My_MEM_Stage(
       .clk(clk),.reset(reset),.MEMread(MEM_R_EN_MEM),.MEMwrite(MEM_W_EN_MEM),
       .address(Alu_result_MEM),.data(Val_Rm_MEM),
   
-      .MEM_result(MEM_Result)
+      .MEM_result(MEM_Result),
+      
+      .SRAM_ready(SRAM_ready),
+      
+      .SRAM_DQ(SRAM_DQ),
+      .SRAM_ADDR(SRAM_ADDR),
+      .SRAM_WE_N(SRAM_WE_N)
       );
       
 MEM_Stage_Reg My_MEM_Stage_Reg(
       .clk(clk),.reset(reset),.WB_EN_IN(WB_EN_MEM),.MEM_R_EN_IN(MEM_R_EN_MEM),
       .ALU_result_in(Alu_result_MEM),.Mem_read_value_in(MEM_Result),
       .Dest_in(Dest_MEM),
+      .SRAM_Freeze(~SRAM_ready),
   
       .WB_en(WB_WB_En),.MEM_R_en(MEM_R_EN_WB),
       .ALU_result(Alu_result_WB),.Mem_read_value(MEM_Result_WB),
