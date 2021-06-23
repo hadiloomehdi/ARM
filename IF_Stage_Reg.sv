@@ -1,7 +1,11 @@
 `timescale 1ns/1ns
 module IF_Stage_Reg(input clk,reset,Freeze,Flush,
-                input[31:0] PC_in,Instruction_in,
-                output reg [31:0] PC,Instruction);  
+                    input SRAM_Freeze,
+                    input[31:0] PC_in,Instruction_in,
+                    output reg [31:0] PC,Instruction);  
+                
+  wire freeze;
+  assign freeze = Freeze | SRAM_Freeze;
                 
   always@(posedge clk,posedge reset)
     begin
@@ -12,7 +16,7 @@ module IF_Stage_Reg(input clk,reset,Freeze,Flush,
         end
       else
         begin
-          if(Freeze == 0)
+          if(freeze == 0)
             begin
               if(Flush)
                 begin
@@ -32,8 +36,4 @@ module IF_Stage_Reg(input clk,reset,Freeze,Flush,
             end
         end
     end
-  
-                
-
-
 endmodule
