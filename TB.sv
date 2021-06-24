@@ -1,7 +1,7 @@
 `timescale 1ns/1ns
 module TB();
   reg reset,clk = 0;
-  reg Forward_en = 0;
+  reg Forward_en = 1;
   reg SRAM_clk = 0;
   
   wire SRAM_WE_N;
@@ -21,7 +21,7 @@ module TB();
   
   initial begin
     reset=1;
-    #200
+    #5
     reset=0;
     #13000;
     $stop;
