@@ -43,7 +43,7 @@ module MEM_Stage(
     );
 
     Cache_Controller Cache_Controller(
-     .clk(clk), .rst(rst),
+     .clk(clk), .rst(reset),
 
     //mem 
     .address(address), .wdata(data),  
@@ -71,7 +71,7 @@ module MEM_Stage(
 
 
 Cache Cache(
-    .clk(clk), .rst(clk), .write_en(cache_w_en), .read_en(cache_r_en), .invoke_en(cache_invoke),
+    .clk(clk), .rst(reset), .write_en(cache_w_en), .read_en(cache_r_en), .invoke_en(cache_invoke),
     .address(cache_address),
     .write_data(SRAM_DQ),
 

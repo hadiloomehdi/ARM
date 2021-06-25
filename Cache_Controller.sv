@@ -40,7 +40,7 @@ module Cache_Controller(
     else present_state <= next_state;
     end
 
-  assign ns = (present_state == idle && MEM_R_EN && ~cache_hit) ? SR_CW :
+  assign next_state = (present_state == idle && MEM_R_EN && ~cache_hit) ? SR_CW :
               (present_state == idle && MEM_W_EN) ? SRAM_Write :
               (present_state == SR_CW && sram_ready) ? idle :
               (present_state == SRAM_Write && sram_ready) ? idle :
@@ -50,7 +50,7 @@ module Cache_Controller(
                  (present_state == SR_CW && sram_ready) ? (index ? sram_rdata[63:32] : sram_rdata[31:0]) :
                  32'bz;
                  
-  assign ready = (ns == idle);
+  assign ready = (next_state == idle);
   
   assign sram_address = (present_state == SR_CW || present_state == SRAM_Write ) ? address : 64'bz;
   
@@ -64,6 +64,6 @@ module Cache_Controller(
   
   assign cache_w_en = (present_state == SR_CW && sram_ready);
   
-  assign cache_invoke = (present_state == idle && ns == SRAM_Write);
+  assign cache_invoke = (present_state == idle && next_state == SRAM_Write);
 
 endmodule
