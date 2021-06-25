@@ -6,7 +6,7 @@ module TB();
   
   wire SRAM_WE_N;
   wire [16:0] SRAM_ADDR;
-  wire [31:0] SRAM_DQ;
+  wire [63:0] SRAM_DQ;
   
   ARM ARM_UUT(.clk(clk),.reset(reset),.Forward_en(Forward_en),
           .SRAM_WE_N(SRAM_WE_N),

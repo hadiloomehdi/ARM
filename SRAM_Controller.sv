@@ -4,11 +4,11 @@ input clk,reset,
 input write_en,read_en,
 input [31:0] address,writeData,
 
-output [31:0] readData,
+output [63:0] readData,
 
 output SRAM_ready,
 
-inout [31:0] SRAM_DQ,
+inout [63:0] SRAM_DQ,
 
 output [16:0] SRAM_ADDR,
 output SRAM_WE_N
@@ -57,7 +57,7 @@ end
                        (present_state == SRAM_Start) && (write_en | read_en) ? 1'b0 :
                        1'b1;           
   
-  assign  SRAM_DQ   = (present_state == SRAM_Write  && counter < 3'd6) ? writeData  : 32'bz ;
+  assign  SRAM_DQ   = (present_state == SRAM_Write  && counter < 3'd6) ? writeData  : 64'bz ;
  
   assign  SRAM_ADDR = s_address;
  

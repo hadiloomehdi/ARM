@@ -1,6 +1,6 @@
 `timescale 1ns/1ns
 module ARM(input clk,reset,Forward_en,
-           output [16:0] SRAM_ADDR,inout [31:0] SRAM_DQ,
+           output [16:0] SRAM_ADDR,inout [63:0] SRAM_DQ,
            output SRAM_WE_N
             );
 
